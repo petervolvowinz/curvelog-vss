@@ -1,0 +1,4 @@
+{"request":[
+  {"action":"subscribe","path":"Vehicle.Speed","filter":{"type":"curvelog","parameter":{"maxerr":"2","bufsize":"20"}},"requestId":"275"},
+  {"action":"subscribe","path":"Vehicle.Speed","filter":{"type":"curvelog","parameter":{"maxerr":"1","bufsize":"5"}},"requestId":"277"},
+]}
