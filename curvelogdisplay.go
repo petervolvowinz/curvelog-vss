@@ -13,47 +13,6 @@ import (
 
 var grpcCompression utils.Compression
 
-func index_handler(w http.ResponseWriter, r *http.Request) {
-	// MAIN SECTION HTML CODE
-	fmt.Fprintf(w, "<h1>Whoa, Go is neat!</h1>")
-	fmt.Fprintf(w, "<title>Go</title>")
-	fmt.Fprintf(w, "<img src='assets/plotter.png' alt='gopher' style='width:1024px;height:800px;'>")
-}
-
-func about_handler(w http.ResponseWriter, r *http.Request) {
-	// ABOUT SECTION HTML CODE
-	fmt.Fprintf(w, "<title>Go/about/</title>")
-	fmt.Fprintf(w, "Plotting data from signal broker")
-}
-
-func dynamicHandler2(w http.ResponseWriter, r *http.Request) {
-	html := `<!DOCTYPE html>
-				<html lang="en">
-				<head>
-					<meta charset="UTF-8">
-					<meta name="viewport" content="width=device-width, initial-scale=1.0">
-					<title>Refresh PNG Image</title>
-				<script>
-						// Function to refresh the image
-						function refreshImage() {
-							var img = document.getElementById('image');
-							img.src = img.src.split('?')[0] + '?' + new Date().getTime();
-						}
-
-						// Function to refresh the image every second
-						function startRefreshing() {
-							setInterval(refreshImage, 500);
-						}
-				</script>
-				</head>
-				<body onload="startRefreshing()">
-					<!-- Replace 'image.png' with your image file path -->
-					<img id="image" src="image.png" alt="Image">
-				</body>
-		</html>`
-	fmt.Fprintf(w, html)
-}
-
 func getVISSStream(command string, ctx context.Context) pb.VISSv2_SubscribeRequestClient {
 
 	vssRequest := command
@@ -127,10 +86,8 @@ func main() {
 	go drawPNG(grpcvalue_1)
 
 	//web server
-	http.HandleFunc("/mupp", index_handler)
 	http.HandleFunc("/about/", about_handler)
-	http.HandleFunc("/plotter", dynamicHandler2)
-
+	http.HandleFunc("/plotter", dynamicHandler)
 	http.Handle("/", http.FileServer(http.Dir("./assets")))
 
 	http.ListenAndServe(":9000", nil)
