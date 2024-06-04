@@ -5,13 +5,12 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"sync"
-
 	pb "github.com/covesa/vissr/grpc_pb"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"math"
 	"strconv"
+	"sync"
 	"time"
 )
 
@@ -19,9 +18,7 @@ var commandList []string
 
 func initCommandList() {
 	commandList = make([]string, 2)
-
-	commandList[0] = `{"action":"subscribe","path":"Vehicle.Speed","filter":{"type":"curvelog","parameter":{"maxerr":"1","bufsize":"30"}},"requestId":"285"}`
-	commandList[1] = `{"action":"subscribe","path":"Vehicle/Speed","filter":{"type":"timebased","parameter":{"period":"100"}},"requestId":"286"}`
+	commandList[0], commandList[1] = GenerateCommands()
 }
 
 func getGRPCServerConnection() (*grpc.ClientConn, error) {

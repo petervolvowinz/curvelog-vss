@@ -1,4 +1,4 @@
-module curvelogwebserver
+module curvelog-vss
 
 go 1.22.1
 
