@@ -17,7 +17,7 @@ func _initCommandList() {
 	_commandList[1] = `{"action":"subscribe","path":"Vehicle.Speed","filter":{"type":"timebased","parameter":{"period":"100"}},"requestId":"286"}`
 }
 
-func getStructCommands()(Command,Command){
+func getStructCommands() (Command, Command) {
 	command_1 := Command{
 		Action: "subscribe",
 		Path:   "vehicle.speed",
@@ -38,11 +38,11 @@ func getStructCommands()(Command,Command){
 		RequestID: "301",
 	}
 
-	return command_1,command_2
+	return command_1, command_2
 }
 
 func TestCommand(t *testing.T) {
-	command_1,command_2 := GenerateCommands()
+	command_1, command_2 := getStructCommands()
 	_initCommandList()
 	var test_cmd_1 Command
 	err := json.Unmarshal([]byte(_commandList[0]), &test_cmd_1)
@@ -58,5 +58,17 @@ func TestCommand(t *testing.T) {
 		t.Error(" could not unmarshal test ", err)
 	}
 
-	if command_1
+	if command_1.Filter.Type != test_cmd_1.Filter.Type {
+		t.Error("commands curvelog dont match after parsing")
+	}
+
+	if command_2.Filter.Type != test_cmd_2.Filter.Type {
+		t.Error("commands timebased dont match after parsing")
+	}
+}
+
+func TestGenerateCommands(t *testing.T) {
+	cmd1, cmd2 := GenerateCommands()
+	fmt.Println(cmd1)
+	fmt.Println(cmd2)
 }

@@ -8,8 +8,27 @@ import (
 	"github.com/akamensky/argparse"
 	pb "github.com/covesa/vissr/grpc_pb"
 	"github.com/covesa/vissr/utils"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 	"net/http"
+	"strconv"
 )
+
+// setup viss grpc connection
+func getGRPCServerConnection() (*grpc.ClientConn, error) {
+	var connection *grpc.ClientConn
+	target := JsonSettings.Adress + ":" + strconv.Itoa(JsonSettings.PortNo)
+	connection, err := grpc.Dial(target, grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithBlock())
+	if err != nil {
+		return nil, err
+	}
+	return connection, nil
+}
+
+func getVISSClient(connection *grpc.ClientConn, err error) pb.VISSv2Client {
+	client := pb.NewVISSv2Client(connection)
+	return client
+}
 
 var grpcCompression utils.Compression
 
@@ -19,6 +38,7 @@ func getVISSStream(command string, ctx context.Context) pb.VISSv2_SubscribeReque
 	grpcCompression = utils.PB_LEVEL1
 	pbRequest := utils.SubscribeRequestJsonToPb(vssRequest, grpcCompression)
 
+	//TODO add error handling
 	client := getVISSClient(getGRPCServerConnection())
 	stream, _ := client.SubscribeRequest(ctx, pbRequest)
 	return stream
@@ -32,6 +52,7 @@ func retrieveValue(rpcvalue_1 chan string) {
 	grpcCompression = utils.PB_LEVEL1
 	pbRequest := utils.SubscribeRequestJsonToPb(vssRequest, grpcCompression)
 
+	//TODO add error handling
 	client := getVISSClient(getGRPCServerConnection())
 	stream, _ := client.SubscribeRequest(ctx, pbRequest)
 
@@ -78,7 +99,7 @@ func main() {
 		Default:  "info"})
 
 	utils.InitLog("feeder-log.txt", "./logs", *logFile, *logLevel)
-	initCommandList()
+	InitCommandList() // read settings and set commands for streaming signals
 	grpcvalue_1 := make(chan string, 1)
 
 	go getCurveLogValues()

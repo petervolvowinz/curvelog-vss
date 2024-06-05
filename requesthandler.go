@@ -5,36 +5,11 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	pb "github.com/covesa/vissr/grpc_pb"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
 	"math"
 	"strconv"
 	"sync"
 	"time"
 )
-
-var commandList []string
-
-func initCommandList() {
-	commandList = make([]string, 2)
-	commandList[0], commandList[1] = GenerateCommands()
-}
-
-func getGRPCServerConnection() (*grpc.ClientConn, error) {
-	var connection *grpc.ClientConn
-	connection, err := grpc.Dial("0.0.0.0"+":8887", grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithBlock())
-	if err != nil {
-
-		return nil, err
-	}
-	return connection, nil
-}
-
-func getVISSClient(connection *grpc.ClientConn, err error) pb.VISSv2Client {
-	client := pb.NewVISSv2Client(connection)
-	return client
-}
 
 type DataPoint struct {
 	Value string `json:"value"`
