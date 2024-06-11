@@ -99,7 +99,7 @@ func drawGraphData(img *image.RGBA, signalname string, currentsaveratio float64)
 
 	addLabel(img, 880, 20, signalname)
 	addLabel(img, 880, 35, "Sample rate 100 ms")
-	addLabel(img, 880, 50, "cl max error = 1.0 ")
+	addLabel(img, 880, 50, "Cl max error = 1.0 ")
 	currentsaveratio = currentsaveratio * 100
 	outStr := fmt.Sprintf("Discarded samples = %d", uint64(currentsaveratio))
 	addLabel(img, 880, 85, outStr)

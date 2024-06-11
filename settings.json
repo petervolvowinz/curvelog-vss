@@ -1,5 +1,5 @@
 {
-  "vss-name": "vehicle.speed",
+  "vss-name": "Vehicle.Speed",
   "sub-period-ms": "100",
   "curve-log-err": "1.0",
   "curve-log-buf": "20",

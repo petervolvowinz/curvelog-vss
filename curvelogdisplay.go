@@ -104,7 +104,7 @@ func main() {
 
 	go getCurveLogValues()
 	go retrieveValue(grpcvalue_1)
-	go drawPNG(grpcvalue_1)
+	go DrawPNGgg(grpcvalue_1)
 
 	//web server
 	http.HandleFunc("/about/", about_handler)

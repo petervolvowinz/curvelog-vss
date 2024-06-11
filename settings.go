@@ -58,7 +58,7 @@ type CurveLogParameter struct {
 }
 
 type TimeFilterParameter struct {
-	Period string `json:"string"`
+	Period string `json:"period"`
 }
 
 func GenerateCommands() (string, string) {
