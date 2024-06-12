@@ -44,7 +44,7 @@ func GetFontFace(size float64) font.Face {
 func _addLabel(dc *gg.Context, x, y float64, label string) {
 	face := GetFontFace(18)
 	dc.SetFontFace(face)
-	dc.DrawString(label, x-40, y)
+	dc.DrawString(label, x-70, y)
 	dc.Stroke()
 }
 
@@ -63,17 +63,16 @@ func _getXY(dp TimeSeriesDataPoint, width, height, woffset, hoffset, maxX, minX 
 	return x, y
 }
 
-func _drawGraphData(dc *gg.Context, currentsaveratio float64) {
+func _drawGraphData(dc *gg.Context) {
 
 	dc.SetColor(color.Black)
 	_addLabel(dc, 840, 20, JsonSettings.VssName)
 	sampleRateStr := fmt.Sprintf("Sample rate %s%s", JsonSettings.SubPeriod, " ms")
-	_addLabel(dc, 840, 35, sampleRateStr)
+	_addLabel(dc, 840, 40, sampleRateStr)
 	curveMaxError := fmt.Sprintf("Cl max error = %s", JsonSettings.CurveLogErr)
-	_addLabel(dc, 840, 50, curveMaxError)
-	currentsaveratio = currentsaveratio * 100
-	outStr := fmt.Sprintf("Discarded samples = %d", uint64(currentsaveratio))
-	_addLabel(dc, 840, 75, outStr)
+	_addLabel(dc, 840, 60, curveMaxError)
+	outStr := fmt.Sprintf("Discarded samples = %d", GetCountersInstance().Ratio())
+	_addLabel(dc, 840, 80, outStr)
 
 }
 
@@ -94,10 +93,10 @@ func getBackgroundImage(width, height, woffset, hoffset int) image.Image {
 		dc.Stroke()
 		face := GetFontFace(18)
 		dc.SetFontFace(face)
-		dc.DrawStringAnchored("t", float64(width-woffset)+3, float64(height-hoffset), 0.5, 0.5)
+		dc.DrawStringAnchored("t", float64(width-woffset)+5, float64(height-hoffset), 0.5, 0.2)
 		dc.Stroke()
 		dc.SetRGB255(96, 96, 96)
-		dc.DrawStringAnchored("t", float64(width-woffset)+4, float64(height-hoffset)+1, 0.5, 0.5)
+		dc.DrawStringAnchored("t", float64(width-woffset)+6, float64(height-hoffset)+1, 0.5, 0.2)
 		dc.Stroke()
 		backgroundImage = dc.Image()
 	}
@@ -124,6 +123,7 @@ func getcurvelogPickerDot() image.Image {
 }
 
 func DrawPNGgg(grpcvalue_1 chan string) {
+	counters := GetCountersInstance()
 	for {
 		width := 1040
 		height := 800
@@ -147,6 +147,7 @@ func DrawPNGgg(grpcvalue_1 chan string) {
 					oldy = y
 				}
 				dc.DrawLine(x, y, oldx, oldy)
+				counters.IncSampleCounter()
 				oldx = x
 				oldy = y
 				lastdp = &dp
@@ -172,16 +173,13 @@ func DrawPNGgg(grpcvalue_1 chan string) {
 				dc.DrawLine(x, y, oldx, oldy)
 				dc.Stroke()
 				dc.DrawImage(getcurvelogPickerDot(), int(x-2), int(y-2))
-
+				counters.IncDownSampleCounter()
 				oldx = x
 				oldy = y
 			}
 			dc.Stroke()
-			ratio := float64(len(timeSeriesDataBufferCLog.TSeries)) / float64(len(timeSeriesDataBufferNoCLog.TSeries))
-			fmt.Println("CURRENT SAVE RATIO = ", 1.0-ratio, "%")
 			cLogMutex.Unlock()
-
-			_drawGraphData(dc, 1.0-ratio)
+			_drawGraphData(dc)
 
 			dc.SavePNG("assets/image1.png")
 			time.Sleep(20 * time.Millisecond)
