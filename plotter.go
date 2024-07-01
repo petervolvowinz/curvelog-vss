@@ -44,7 +44,7 @@ func GetFontFace(size float64) font.Face {
 func _addLabel(dc *gg.Context, x, y float64, label string) {
 	face := GetFontFace(18)
 	dc.SetFontFace(face)
-	dc.DrawString(label, x-70, y)
+	dc.DrawString(label, x-80, y)
 	dc.Stroke()
 }
 
@@ -71,7 +71,7 @@ func _drawGraphData(dc *gg.Context) {
 	_addLabel(dc, 840, 40, sampleRateStr)
 	curveMaxError := fmt.Sprintf("Cl max error = %s", JsonSettings.CurveLogErr)
 	_addLabel(dc, 840, 60, curveMaxError)
-	outStr := fmt.Sprintf("Discarded samples = %d", GetCountersInstance().Ratio())
+	outStr := fmt.Sprintf("Discarded samples = %d%%", GetCountersInstance().Ratio())
 	_addLabel(dc, 840, 80, outStr)
 
 }

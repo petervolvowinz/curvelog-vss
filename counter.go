@@ -19,20 +19,20 @@ type sampleCounters struct {
 }
 
 // increase sample_counter with 1
-func (counter sampleCounters) IncSampleCounter() int {
+func (counter *sampleCounters) IncSampleCounter() int {
 	counter.sample_counter++
 	return counter.sample_counter
 }
 
 // increase downsample_cpunter with 1
-func (counter sampleCounters) IncDownSampleCounter() int {
+func (counter *sampleCounters) IncDownSampleCounter() int {
 	counter.downsample_counter++
 	return counter.downsample_counter
 }
 
 // the percentage of samples not used
 func (counter sampleCounters) Ratio() int {
-	return int(math.Round(1.0 - float64(counter.downsample_counter)/float64(counter.sample_counter)*100))
+	return int(math.Round((1.0 - float64(counter.downsample_counter)/float64(counter.sample_counter)) * 100))
 }
 
 var counterlock = &sync.Mutex{}
