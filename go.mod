@@ -5,13 +5,13 @@ go 1.22.1
 require (
 	github.com/akamensky/argparse v1.4.0
 	github.com/covesa/vissr v0.0.0-20240415145235-e358eea0da11
+	github.com/fogleman/gg v1.3.0
+	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0
 	golang.org/x/image v0.15.0
 	google.golang.org/grpc v1.63.2
 )
 
 require (
-	github.com/StephaneBunel/bresenham v0.0.0-20211027152503-ec76d7b8e923 // indirect
-	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
 	github.com/golang/protobuf v1.5.4 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/gorilla/websocket v1.5.1 // indirect

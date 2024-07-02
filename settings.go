@@ -17,6 +17,14 @@ type Settings struct {
 	PortNo      int    `json:"port"`
 }
 
+var JsonSettings *Settings
+var commandList []string
+
+func InitCommandList() {
+	commandList = make([]string, 2)
+	commandList[0], commandList[1] = GenerateCommands()
+}
+
 func (settings *Settings) GetSettings() {
 	jsonFile, err := os.Open("settings.json")
 	if err != nil {
@@ -50,29 +58,29 @@ type CurveLogParameter struct {
 }
 
 type TimeFilterParameter struct {
-	Period string `json:"string"`
+	Period string `json:"period"`
 }
 
 func GenerateCommands() (string, string) {
-	settings := &Settings{}
-	settings.GetSettings()
+	JsonSettings = &Settings{}
+	JsonSettings.GetSettings()
 
 	command_1 := Command{
 		Action: "subscribe",
-		Path:   settings.VssName,
+		Path:   JsonSettings.VssName,
 		Filter: Filter{
 			Type:      "curvelog",
-			Parameter: CurveLogParameter{MaxErr: settings.CurveLogErr, BufSize: settings.CurveLogBuf},
+			Parameter: CurveLogParameter{MaxErr: JsonSettings.CurveLogErr, BufSize: JsonSettings.CurveLogBuf},
 		},
 		RequestID: "300",
 	}
 
 	command_2 := Command{
 		Action: "subscribe",
-		Path:   settings.VssName,
+		Path:   JsonSettings.VssName,
 		Filter: Filter{
 			Type:      "timebased",
-			Parameter: TimeFilterParameter{Period: settings.SubPeriod},
+			Parameter: TimeFilterParameter{Period: JsonSettings.SubPeriod},
 		},
 		RequestID: "301",
 	}

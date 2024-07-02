@@ -1,8 +1,8 @@
 {
-  "vss-name": "vehicle.speed",
+  "vss-name": "Vehicle.Speed",
   "sub-period-ms": "100",
   "curve-log-err": "1.0",
   "curve-log-buf": "20",
   "adress": "0.0.0.0",
-  "port": 8080
+  "port": 8887
 }
