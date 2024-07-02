@@ -1,6 +1,8 @@
 # curvelog-vss
 VISS Client that plots a time based vss signal and its curved logged data points.
 
+![Ex](sample.png)
+
 In the settings.json we specify VISS server adress and port.
 The signal we want to plot, the time based parameter in milliseconds,
 The curve logging maximum error and buffer size.
@@ -20,3 +22,15 @@ to listen to gRPC clients at 8887.
 ```
 
 To run this a **VISS** server installtion with a **data feeder** is needed.
+
+```
+From the project root:
+go build .
+./curvelog-vss
+```
+
+```
+open your browser with:
+localhost:9000/plotter
+```
+**NOTE** Currently the plotter needs to start before the vissr server...
