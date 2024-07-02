@@ -32,6 +32,10 @@ func DoFoglemanPNG() {
 	dc.SavePNG("out.png")
 }
 
+func _mapRange(value, fromLow, fromHigh, toLow, toHigh float64) float64 {
+	return (value-fromLow)*(toHigh-toLow)/(fromHigh-fromLow) + toLow
+}
+
 func GetFontFace(size float64) font.Face {
 	font, err := truetype.Parse(goregular.TTF)
 	if err != nil {
@@ -57,8 +61,8 @@ func _getXY(dp TimeSeriesDataPoint, width, height, woffset, hoffset, maxX, minX 
 	if maxX == minX {
 		return 0, 0
 	}
-	x := mapRange(xval, minX, maxX, woffset, width-woffset) //woffset/2 + (width-woffset)*(xval/1000)
-	y := height - mapRange(dp.Value, 0, 50, hoffset, height-hoffset)
+	x := _mapRange(xval, minX, maxX, woffset, width-woffset) //woffset/2 + (width-woffset)*(xval/1000)
+	y := height - _mapRange(dp.Value, 0, 50, hoffset, height-hoffset)
 
 	return x, y
 }
